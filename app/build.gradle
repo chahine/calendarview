@@ -6,7 +6,7 @@ android {
   compileSdkVersion 27
 
   defaultConfig {
-    applicationId "com.chahine.calendarview"
+    applicationId "com.chahine.calendarview.sample"
 
     minSdkVersion 21
     targetSdkVersion 27
@@ -26,6 +26,8 @@ android {
 }
 
 dependencies {
+  implementation project(':calendarview')
+
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
   implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -34,9 +36,4 @@ dependencies {
 
   implementation 'com.jakewharton.timber:timber:4.7.0'
   implementation 'com.jakewharton.threetenabp:threetenabp:1.0.5'
-
-  testImplementation 'junit:junit:4.12'
-
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }

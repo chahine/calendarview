@@ -12,7 +12,7 @@ import org.threeten.bp.format.TextStyle.SHORT
 import java.util.Locale
 
 class DayHeaderDelegate {
-  class Delegate : com.chahine.calendarview.CalendarAdapter.Delegate {
+  class Delegate : CalendarAdapter.Delegate {
     override fun layoutId() = R.layout.item_day_header
 
     override fun create(parent: ViewGroup) = Holder(itemView(parent))

@@ -1,9 +1,11 @@
-package com.chahine.calendarview
+package com.chahine.calendarview.sample
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import com.chahine.calendarview.CalendarAdapter
+import com.chahine.calendarview.CalendarAdapter.Item
 import com.chahine.calendarview.decoration.EdgeSpacingDecoration
 import com.chahine.calendarview.delegates.DayDelegate
 import com.chahine.calendarview.delegates.DayHeaderDelegate
@@ -33,16 +35,16 @@ class MainActivity : AppCompatActivity() {
     val today = LocalDate.now()
     val firstDayOfYear = LocalDate.ofYearDay(today.year, 1)
 
-    val data = mutableListOf<CalendarAdapter.Item>()
+    val data = mutableListOf<Item>()
     (0 until 12).forEach {
       data.addAll(itemsForMonth(firstDayOfYear.plusMonths(it.toLong())))
     }
     mainAdapter.swapData(data)
   }
 
-  private fun itemsForMonth(firstDayOfMonth: LocalDate): List<CalendarAdapter.Item> {
+  private fun itemsForMonth(firstDayOfMonth: LocalDate): List<Item> {
 
-    val result = mutableListOf<CalendarAdapter.Item>()
+    val result = mutableListOf<Item>()
 
     DayOfWeek.values().forEachIndexed { index, day ->
       // offsetting by one to get Sunday as first day of week

@@ -4,6 +4,8 @@ import android.os.Handler
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.ViewGroup
+import java.util.ArrayList
+import java.util.HashMap
 
 /**
  * [RvAdapter] is a generic implementation of [RecyclerView.Adapter] that contains and helper

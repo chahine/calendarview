@@ -10,7 +10,7 @@ import com.chahine.calendarview.R
 import org.threeten.bp.LocalDate
 
 class DayDelegate {
-  class Delegate : com.chahine.calendarview.CalendarAdapter.Delegate {
+  class Delegate : CalendarAdapter.Delegate {
     override fun layoutId() = R.layout.item_day_number
 
     override fun create(parent: ViewGroup) = Holder(itemView(parent))
