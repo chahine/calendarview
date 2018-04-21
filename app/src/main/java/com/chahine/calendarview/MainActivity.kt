@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import com.chahine.calendarview.decoration.EdgeSpacingDecoration
+import com.chahine.calendarview.delegates.DayDelegate
+import com.chahine.calendarview.delegates.DayHeaderDelegate
+import com.chahine.calendarview.delegates.EmptyDayDelegate
 import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.android.synthetic.main.activity_main.list
 import org.threeten.bp.DayOfWeek
-import org.threeten.bp.DayOfWeek.SUNDAY
 import org.threeten.bp.LocalDate
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -20,31 +23,32 @@ class MainActivity : AppCompatActivity() {
     AndroidThreeTen.init(this)
     setContentView(R.layout.activity_main)
 
-    val mainAdapter = MainAdapter()
+    val mainAdapter = CalendarAdapter()
     list.apply {
       layoutManager = GridLayoutManager(this@MainActivity, 7, RecyclerView.HORIZONTAL, false)
       adapter = mainAdapter
+      addItemDecoration(EdgeSpacingDecoration(this@MainActivity))
     }
 
     val today = LocalDate.now()
-    val firstDayOfMonth = today.minusDays(today.dayOfMonth.toLong() - 1)
+    val firstDayOfYear = LocalDate.ofYearDay(today.year, 1)
 
-    Timber.d("--> $today")
-    Timber.d("--> $firstDayOfMonth")
-
-    mainAdapter.swapData(itemsForMonth(firstDayOfMonth.plusMonths(1)))
+    val data = mutableListOf<CalendarAdapter.Item>()
+    (0 until 12).forEach {
+      data.addAll(itemsForMonth(firstDayOfYear.plusMonths(it.toLong())))
+    }
+    mainAdapter.swapData(data)
   }
 
-  fun itemsForMonth(firstDayOfMonth: LocalDate): List<String> {
+  private fun itemsForMonth(firstDayOfMonth: LocalDate): List<CalendarAdapter.Item> {
 
-    val result = mutableListOf<String>()
-    val days = listOf("S", "M", "T", "W", "T", "F", "S")
+    val result = mutableListOf<CalendarAdapter.Item>()
 
-    days.forEachIndexed { index, day ->
-      val dayDates = mutableListOf<String>()
-      dayDates.add(day)
+    DayOfWeek.values().forEachIndexed { index, day ->
+      // offsetting by one to get Sunday as first day of week
+      result.add(DayHeaderDelegate.Item(day.minus(1)))
 
-      var dayDate = if (firstDayOfMonth.dayOfWeek != SUNDAY) {
+      val dayDate = if (isFirstDayOfWeek(firstDayOfMonth)) {
         firstDayOfMonth
             .minusDays(firstDayOfMonth.dayOfWeek.value.toLong())
             .plusDays(index.toLong())
@@ -52,22 +56,21 @@ class MainActivity : AppCompatActivity() {
         firstDayOfMonth.plusDays(index.toLong())
       }
 
-      Timber.d("--> $day: $dayDate: ${dayDate.dayOfWeek}")
-
-      while (dayDate.monthValue <= firstDayOfMonth.monthValue) {
-        if (dayDate.monthValue != firstDayOfMonth.monthValue) {
-          dayDates.add("")
-        } else {
-          dayDates.add(dayDate.dayOfMonth.toString())
-        }
-        dayDate = dayDate.plusDays(7)
-      }
-      while (dayDates.size < 7) {
-        dayDates.add("")
-      }
-      result.addAll(dayDates)
+      (0 until 6)
+          .map { dayDate.plusDays(7L * it) }
+          .forEach {
+            if (it.monthValue != firstDayOfMonth.monthValue) {
+              result.add(EmptyDayDelegate.Item(it))
+            } else {
+              result.add(DayDelegate.Item(it))
+            }
+          }
     }
 
     return result
+  }
+
+  private fun isFirstDayOfWeek(firstDayOfMonth: LocalDate): Boolean {
+    return firstDayOfMonth.dayOfWeek != DayOfWeek.SUNDAY
   }
 }
