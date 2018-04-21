@@ -63,7 +63,6 @@ gen/
 # Gradle files
 .gradle/
 build/
-ci/
 
 # Local configuration file (sdk path, etc)
 local.properties
