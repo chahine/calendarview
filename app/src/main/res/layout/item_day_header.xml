@@ -2,9 +2,10 @@
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dayNumber"
+    android:id="@+id/dayHeader"
     android:layout_width="@dimen/cell_size"
     android:layout_height="@dimen/cell_size"
     android:gravity="center"
+    android:textStyle="bold"
     tools:text="5"
     />
